@@ -1,25 +1,35 @@
-import logo from './logo.svg';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import './App.css';
+import UserList from './Components/userList/UserList';
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  
+  
+  const [users, setUsers] = useState(null)
+  const [loading, setLoading] = useState(true)
+    const getusers  =async()=> {
+        try {
+          const response = await axios.get("https://jsonplaceholder.typicode.com/users");
+          setUsers(response.data);
+          console.log(response.data)
+          setLoading(false)
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      useEffect(() => {
+          console.log("component app did mount or state query updated")
+        getusers()
+      }, [])
+      return (
+        <div className="App">
+          
+        {loading?<h1>loading ...</h1>: <UserList users={users}/>}
+        
+       
     </div>
   );
 }
-
 export default App;
